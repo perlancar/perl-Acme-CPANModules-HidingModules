@@ -20,6 +20,10 @@ _
         {module=>'lib::disallow'},
         {module=>'Devel::Hide'},
         {module=>'Test::Without::Module'},
+        {module=>'Module::Path::Patch::Hide', summary=>'This only hides modules from Module::Path'},
+        {module=>'Module::Path::More::Patch::Hide', summary=>'This only hides modules from Module::Path::More'},
+        {module=>'Module::List::Patch::Hide', summary=>'This only hides modules from Module::List'},
+        {module=>'PERLANCAR::Module::List::Patch::Hide', summary=>'This only hides modules from PERLANCAR::Module::List'},
     ],
 };
 
