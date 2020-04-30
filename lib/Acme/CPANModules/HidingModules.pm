@@ -7,39 +7,50 @@ package Acme::CPANModules::HidingModules;
 
 our $text = <<'_';
 
-So you want to convince some Perl code that some modules that are installed,
-aren't (usually for testing purposes)? There are several ways to go about it,
-with different effects and levels of convincing.
+So you want to convince some Perl code that some modules that are actually
+installed, aren't? There are several ways to accomplish this, with different
+effects and levels of convincing. This list details them.
 
-**Loading modules**
+**Why?**
 
-Most of the time, you just want to make certain modules not loadable (by
-`require` or `use`). To do this, you usually install a hook at the first element
-of `@INC`. The hook would die when it receives a request to load a modules that
-you want to hide. Some tools that work this way include:
+First of all, why would you want to do this? Almost always, the answer is: for
+testing purposes. For example, you want to make sure that your code can work
+without an optional module. Or, alternatively, you want to test how your code
+fails under the absence of certain modules.
+
+
+**Making modules not loadable**
+
+Most of the time, you just want to make certain modules not loadable. That is,
+making `require SomeModule` or `use Module` fail. To do this, you usually
+install a hook at the first element of `@INC`. The hook would die when it
+receives a request to load a module that you want to hide. Some tools that work
+this way include:
 
 <pm:lib::filter> family, including its thin wrapper <pm:lib::disallow>.
-lib::filter supports hiding (non-)core modules in addition to the specific ones
-you mentioned. It also supports recursive allowing (i.e. you want to allow Moo
-and all the modules that Moo loads, and all the modules that they load, and so
-on).
+lib::filter et al supports hiding modules that you specify, as well as hiding
+all core modules or all non-core modules. They also support recursive allowing,
+i.e. you want to allow Moo and all the modules that Moo loads, and all the
+modules that they load, and so on.
 
-<pm:Devel::Hide>, which also plans to support hiding (non-)core modules.
+<pm:Devel::Hide>. Devel::Hide also works by installing a hook in `@INC`. It
+supports propagating the hiding to child process by setting PERL5OPT environment
+variable.
 
 <pm:Test::Without::Module>.
 
 
-**Finding module's path**
+**Fooling module path finders**
 
 Depending on which tool you use to find a module's path, here are some patches
-you can load to fool the finder tool.
+you can load to fool the finder.
 
 <pm:Module::Path::Patch::Hide>
 
 <pm:Module::Path::More::Patch::Hide>
 
 
-**Listing installed modules**
+**Fooling module listers**
 
 Depending on which tool you use to find a module's path, here are some patches
 you can load to fool the lister tool.
@@ -57,7 +68,7 @@ you can load to fool the lister tool.
 
 To fool code that tries to find the module files themselves without using any
 module, i.e. by iterating @INC, you will need to actually (temporarily) rename
-the module files. L<pm:App::pmhiderename> and L<lib::hiderename> does this.
+the module files. <pm:App::pmhiderename> and <lib::hiderename> does this.
 
 _
 
